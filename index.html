@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hydra + Granular Synthesis + Mouse Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Hydra -->
+  <script src="https://unpkg.com/hydra-synth"></script>
+
+  <!-- Tone.js -->
+  <script src="https://unpkg.com/tone@latest/build/Tone.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+      height: 100%;
+      width: 100%;
+      cursor: crosshair;
+    }
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+    #startButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #111;
+      color: white;
+      border: 1px solid #888;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button id="startButton">Start Audio + Visuals</button>
+  <canvas id="myCanvas"></canvas>
+
+  <script>
+    const startButton = document.getElementById("startButton");
+
+    startButton.addEventListener("click", async () => {
+      startButton.style.display = "none";
+
+      // === Hydra visuals ===
+      const hydra = new Hydra({
+        canvas: document.getElementById("myCanvas"),
+        detectAudio: true,
+      });
+  setResolution(window.innerWidth,window.innerHeight)
+  osc(20,0.1,1)
+  .color(1,() => mouse.x/window.innerWidth,() => mouse.y/window.innerHeight,1)
+  .hue(-0.1)
+  .modulate(noise(1,0),0.5)
+  .modulateRotate(osc(12,0)
+  .kaleid(100),4)
+  .posterize(5)
+  .mult(osc(3,0.5,5).brightness( () => a.fft[0]))
+  .modulatePixelate(noise(1, 0.1), () => (a.fft[1]*200)+50)
+  .mult(src(o1), 0.1)
+  .modulateRotate(shape().g().modulateRotate(osc(30).modulate(osc(21.2))))
+  .out(o0)
+
+
+
+      // === Tone.js Granular Synth ===
+      await Tone.start();
+      console.log("Tone.js started");
+
+      const player = new Tone.GrainPlayer({
+        url: "https://tonejs.github.io/audio/drum-samples/CR78/kick.mp3",
+        loop: true,
+        grainSize: 0.1,
+        overlap: 0.05,
+        playbackRate: 1,
+        detune: 1200,
+        volume: -12
+      }).toDestination();
+
+      player.start();
+
+      // === Mouse Control ===
+      document.addEventListener("mousemove", (e) => {
+        const xNorm = e.clientX / window.innerWidth;  // 0 to 1
+        const yNorm = e.clientY / window.innerHeight; // 0 to 1
+
+        // Map x to playbackRate: 0.25x to 2x
+        player.playbackRate = 0.25 + xNorm * 3.75;
+
+        // Map y to grainSize: 0.01s to 0.3s
+        player.grainSize = 0.01 + (1 - yNorm) * 0.29;
+      });
+    });
+  </script>
+</body>
+</html>
