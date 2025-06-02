@@ -25,6 +25,15 @@
         canvas: document.getElementById("myCanvas"),
         detectAudio: true,
       });
+
+      textCanvas = document.createElement('canvas')
+      ctx = textCanvas.getContext('2d')
+      ctx.font = "20px Arial"
+      ctx.fillStyle = "red";
+      ctx.fillText("fraktur", 200, 50, 500)   
+
+      s0.init({ src: textCanvas, dynamic: true, setResolution:"200px" })
+
     setResolution(window.innerWidth,window.innerHeight)
     osc(20,0.1,1)
     .color(1,() => mouse.x/window.innerWidth,() => mouse.y/window.innerHeight,1)
@@ -37,6 +46,7 @@
     .modulatePixelate(noise(1, 0.1), () => (a.fft[1]*200)+50)
     .mult(src(o1), 0.1)
     .modulateRotate(shape().g().modulateRotate(osc(30).modulate(osc(21.2))))
+    .add(src(s0), () => mouse.x/window.innerWidth)
     .out(o0)
 
 
