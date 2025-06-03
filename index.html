@@ -30,9 +30,9 @@
       ctx = textCanvas.getContext('2d')
       ctx.font = "20px Arial"
       ctx.fillStyle = "red";
-      ctx.fillText("fraktur", 200, 50, 500)   
+      ctx.fillText("fraktur", 100, 50, 500)   
 
-      s0.init({ src: textCanvas, dynamic: true, setResolution:"200px" })
+      s0.init({ src: textCanvas, dynamic: true, setResolution:"200x200" })
 
     setResolution(window.innerWidth,window.innerHeight)
     osc(20,0.1,1)

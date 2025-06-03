@@ -9,7 +9,7 @@ html, body {
   background-color: black;
   height: 100%;
   width: 100%;
-  cursor: crosshair;
+  cursor: none;
 }
 canvas {
   display: block;
