@@ -33,21 +33,30 @@
       ctx.fillText("fraktur", 100, 50, 500)   
 
       s0.init({ src: textCanvas, dynamic: true, setResolution:"200x200" })
-
+      
     setResolution(window.innerWidth,window.innerHeight)
-    osc(20,0.1,1)
-    .color(1,() => mouse.x/window.innerWidth,() => mouse.y/window.innerHeight,1)
-    .hue(-0.1)
-    .modulate(noise(() => (mouse.y/window.innerHeight*50),0),0.5)
-    .modulateRotate(osc(12,0)
-    .kaleid(100),4)
-    .posterize(5)
-    .mult(osc(3,0.5,5).brightness( () => a.fft[0]))
-    .modulatePixelate(noise(1, 0.1), () => (a.fft[1]*200)+50)
-    .mult(src(o1), 0.1)
-    .modulateRotate(shape().g().modulateRotate(osc(30).modulate(osc(21.2))))
-    .add(src(s0), () => mouse.x/window.innerWidth)
-    .out(o0)
+   
+    s1 = 
+    voronoi(10, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+    .modulate(o0,0.03)
+    .mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+    .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
+    .thresh(0.5)
+    .color(1,.9,.9)
+
+    s2 = 
+      
+    voronoi(3, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+    .modulate(o0,0.03)
+    .mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+    .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
+    .modulate(shape().repeat(20).modulateScrollX(noise(100)))
+    .thresh(0.5)
+    .color(1,.9,.85)
+    .modulate(src(o0).repeat(()=>mouse.x/width/200+2),0.2)
+
+
+  s2.blend(s1,()=>mouse.x/width).out()
 
 
 
