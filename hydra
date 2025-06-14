@@ -1,0 +1,24 @@
+s0 = 
+
+voronoi(10, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+.modulate(o0,0.03)
+.mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+.modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
+.thresh(0.5)
+.color(1,.9,.9)
+
+s1 = 
+  
+voronoi(3, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+.modulate(o0,0.03)
+.mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+.modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
+.modulate(shape().repeat(20).modulateScrollX(noise(100)))
+.thresh(0.5)
+.color(1,.9,.85)
+.modulate(src(o0).repeat(()=>mouse.x/width/200+2),0.2)
+
+
+
+
+s1.blend(s0,()=>mouse.x/width).out()
