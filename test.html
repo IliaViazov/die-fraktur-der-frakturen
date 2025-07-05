@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tone.js Continuous Oscillator</title>
+    <script src="https://unpkg.com/tone@next/build/Tone.js"></script>
+</head>
+<body>
+    <h1>Tone.js FM Oscillator with Mouse Gate</h1>
+    <script>
+      async function startFM() {
+            await Tone.start();
+
+            // FX and Envelope
+            const pitchshift = new Tone.PitchShift();
+            const reverb = new Tone.Reverb();
+            const ampEnv = new Tone.AmplitudeEnvelope({
+                attack: 1,
+                decay: 0.2,
+                sustain: 1.0,
+                release: 2
+            }).toDestination();
+
+            // Signal chain: FM Osc → PitchShift → Reverb → Envelope → Destination
+            const fmOsc = new Tone.FMOscillator({
+                frequency: 220,
+                type: "sine",
+                modulationType: "sine",
+                harmonicity: 2,
+                modulationIndex: 10,
+                volume: -20
+            }).connect(pitchshift);
+            pitchshift.connect(reverb);
+            reverb.connect(ampEnv);
+
+            fmOsc.start();
+
+            // Variables for velocity calculation
+            let lastX = null;
+            let lastY = null;
+            let lastTime = null;
+
+            // Mouse move controls frequency, modulation index, and volume
+            document.addEventListener("mousemove", (e) => {
+                const xNorm = e.clientX / window.innerWidth;
+                const yNorm = e.clientY / window.innerHeight;
+                fmOsc.frequency.value = 100 + xNorm * (2000 - 50);
+                fmOsc.modulationIndex.value = 150 + (1 - yNorm) * 59;
+
+                // Velocity calculation
+                const now = performance.now();
+                if (lastX !== null && lastY !== null && lastTime !== null) {
+                    const dx = e.clientX - lastX;
+                    const dy = e.clientY - lastY;
+                    const dt = (now - lastTime) / 1000;
+                    const velocity = Math.sqrt(dx * dx + dy * dy) / dt;
+                    const minVel = 0, maxVel = 2000;
+                    const minVol = -40, maxVol = -10;
+                    const mappedVol = Math.max(minVol, Math.min(maxVol,
+                        minVol + (maxVol - minVol) * (velocity - minVel) / (maxVel - minVel)
+                    ));
+                    fmOsc.volume.value = mappedVol;
+                }
+                lastX = e.clientX;
+                lastY = e.clientY;
+                lastTime = now;
+            });
+
+            // Gate: Envelope triggers on mouse down/up
+            document.addEventListener("mousedown", () => {
+                ampEnv.triggerAttack();
+            });
+            document.addEventListener("mouseup", () => {
+                ampEnv.triggerRelease();
+            });
+      }
+      startFM();
+    </script>
+</body>
+</html>

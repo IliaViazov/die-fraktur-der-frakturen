@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FM Oscillator Mouse Control (Tone.js only)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <style>
+      body { margin: 0; background: #222; color: #fff; font-family: sans-serif; }
+      #info { position: absolute; top: 20px; left: 0; width: 100%; text-align: center; }
+      html, body { height: 100%; width: 100%; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <h2>Move mouse horizontally to control carrier frequency</h2>
+      <div id="freq"></div>
+      <p>Click anywhere to start audio</p>
+    </div>
+    <script>
+      // Create carrier and modulator
+      const carrier = new Tone.Oscillator(220, "sine").toDestination();
+      const modulator = new Tone.Oscillator(2, "sine");
+      const modGain = new Tone.Gain(100); // FM depth
+
+      // Connect modulator to carrier frequency
+      modulator.connect(modGain);
+      modGain.connect(carrier.frequency);
+
+      // Start oscillators (after user gesture)
+      let started = false;
+      document.body.addEventListener("click", async () => {
+        if (!started) {
+          await Tone.start();
+          carrier.start();
+          modulator.start();
+          started = true;
+        }
+      });
+
+      // Mouse move controls carrier frequency
+      document.body.addEventListener("mousemove", (e) => {
+        // Get mouse X as a value between 0 and 1
+        const xNorm = e.clientX / window.innerWidth;
+        const yNorm = e.clientY / window.innerHeight;
+        // Map to frequency range (50Hz to 2000Hz)
+        const freq1 = 50 + yNorm * (2000 - 50);
+        const freq2 = 50 + xNorm * (2000 - 50);
+        modulator.frequency.value = freq1;
+        carrier.frequency.value = freq2;
+        // document.getElementById("freq").textContent = `Carrier frequency: ${freq.toFixed(2)} Hz`;
+      });
+    </script>
+  </body>
+</html>

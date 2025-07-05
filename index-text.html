@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>die-fraktur-der-frakturen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Hydra -->
+  <script src="hydra-engine.js"></script>
+  <!-- Tone.js -->
+  <script src="tone-js-engine.txt"></script>
+</head>
+<body>
+  <button id="startButton">Die Fraktur der Frakturen</button>
+  <canvas id="myCanvas"></canvas>
+
+  <script>
+    const startButton = document.getElementById("startButton");
+
+    startButton.addEventListener("click", async () => {
+      startButton.style.display = "none";
+
+      // === Hydra visuals ===
+      const hydra = new Hydra({
+        canvas: document.getElementById("myCanvas"),
+        detectAudio: true,
+      });
+
+      textCanvas = document.createElement('canvas')
+      ctx = textCanvas.getContext('2d')
+      ctx.font = "20px Arial"
+      ctx.fillStyle = "red";
+      ctx.fillText("fraktur", 100, 50, 500)   
+
+      s0.init({ src: textCanvas, dynamic: true, setResolution:"200x200" })
+      
+    setResolution(window.innerWidth,window.innerHeight)
+   
+s0 = 
+
+voronoi(10, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+.modulate(o0,0.03)
+.mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+.modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
+.thresh(0.5)
+.color(1,.9,.9)
+
+s1 = 
+  
+voronoi(3, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+.modulate(o0,0.03)
+.mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+.modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
+.modulate(shape().repeat(20).modulateScrollX(noise(100)))
+.thresh(0.5)
+.color(1,.9,.85)
+.modulate(src(o0).repeat(()=>mouse.x/width/200+2),0.2)
+
+s2 = 
+  
+voronoi(50, ()=>mouse.x/width/50+5, ()=>mouse.y/height*-10)
+.modulate(o0,0.03)
+.mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+.modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
+.modulate(shape().repeat(20).modulateScrollX(noise(0.5).modulateRotate(osc(200).modulateKaleid(osc(30)))))
+.thresh(0.2)
+.color(.99,.85,.8)
+.modulate(src(o0).repeat(()=>mouse.x/width/200+2),0.2)
+.invert()
+.hue(-0.1)
+
+
+
+
+s1
+  .blend(s0,()=>mouse.x/width)
+  .mult(s2,()=>(mouse.y)/height)
+  .out()
+
+//s2.out()
+
+//s2.out()
+
+
+
+      // === Tone.js Granular Synth ===
+      await Tone.start();
+      console.log("Tone.js started");
+
+      const player1 = new Tone.GrainPlayer({
+        url: "steine.wav",
+        loop: true,
+        grainSize: 0.1,
+        overlap: 0.05,
+        playbackRate: 1,
+        detune: 1200,
+        volume: 0
+      }).toDestination();
+
+      const FFT = new Tone.FFT(32);
+      player1.connect(FFT);
+      // const player2 = new Tone.GrainPlayer({
+      //   url: "13bsn.wav",
+      //   loop: true,
+      //   grainSize: 0.1,
+      //   overlap: 0.05,
+      //   playbackRate: 1,
+      //   detune: 1200,
+      //   volume: 0
+      // }).toDestination();
+      // const player3 = new Tone.GrainPlayer({
+      //   url: "14bsn.wav",
+      //   loop: true,
+      //   grainSize: 0.1,
+      //   overlap: 0.05,
+      //   playbackRate: 1,
+      //   detune: 1200,
+      //   volume: 0
+      // }).toDestination();
+      // const player4 = new Tone.GrainPlayer({
+      //   url: "15bsn.wav",
+      //   loop: true,
+      //   grainSize: 0.1,
+      //   overlap: 0.05,
+      //   playbackRate: 1,
+      //   detune: 1200,
+      //   volume: 0
+      // }).toDestination();
+
+      player1.start();
+      // player2.start();
+      // player3.start();
+      // player4.start();
+
+      // === Mouse Control ===
+      document.addEventListener("mousemove", (e) => {
+        const xNorm = e.clientX / window.innerWidth;  // 0 to 1
+        const yNorm = e.clientY / window.innerHeight; // 0 to 1
+
+        // Map x to playbackRate: 0.25x to 2x
+        player1.playbackRate = 0.15 + xNorm * 1.75;
+        // player2.playbackRate = 0.25 + xNorm * 2.75;
+        // player3.playbackRate = 0.35 + xNorm * 3.75;
+        // player4.playbackRate = 0.45 + xNorm * 4.75;
+
+        // Map y to grainSize: 0.01s to 0.3s
+        player1.grainSize = 0.01 + (1 - yNorm) * 0.29;
+        // player2.grainSize = 0.1 + (1 - yNorm) * 0.69;
+        // player3.grainSize = 0.05 + (1 - yNorm) * 0.59;
+        // player4.grainSize = 0.07 + (1 - yNorm) * 0.69;
+        console.log(FFT.getValue());//returns db -120 to 0
+      });
+    });
+  </script>
+</body>
+</html>

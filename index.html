@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
   <!-- Hydra -->
-  <script src="https://unpkg.com/hydra-synth"></script>
+  <script src="hydra-engine.js"></script>
   <!-- Tone.js -->
-  <script src="https://unpkg.com/tone@latest/build/Tone.js"></script>
+  <script src="tone-js-engine.txt"></script>
 </head>
 <body>
   <button id="startButton">Die Fraktur der Frakturen</button>
@@ -66,6 +66,7 @@ voronoi(50, ()=>mouse.x/width/50+5, ()=>mouse.y/height*-10)
 .thresh(0.2)
 .color(.99,.85,.8)
 .modulate(src(o0).repeat(()=>mouse.x/width/200+2),0.2)
+.invert()
 .hue(-0.1)
 
 
@@ -83,32 +84,73 @@ s1
 
 
       // === Tone.js Granular Synth ===
-      await Tone.start();
-      console.log("Tone.js started");
+      async function startFM() {
+            await Tone.start();
 
-      const player = new Tone.GrainPlayer({
-        url: "https://tonejs.github.io/audio/drum-samples/CR78/kick.mp3",
-        loop: true,
-        grainSize: 0.1,
-        overlap: 0.05,
-        playbackRate: 1,
-        detune: 1200,
-        volume: -12
-      }).toDestination();
+            // FX and Envelope
+            const pitchshift = new Tone.PitchShift();
+            const reverb = new Tone.Reverb();
+            const ampEnv = new Tone.AmplitudeEnvelope({
+                attack: 1,
+                decay: 0.2,
+                sustain: 1.0,
+                release: 2
+            }).toDestination();
 
-      player.start();
+            // Signal chain: FM Osc → PitchShift → Reverb → Envelope → Destination
+            const fmOsc = new Tone.FMOscillator({
+                frequency: 220,
+                type: "sine",
+                modulationType: "sine",
+                harmonicity: 2,
+                modulationIndex: 10,
+                volume: -20
+            }).connect(pitchshift);
+            pitchshift.connect(reverb);
+            reverb.connect(ampEnv);
 
-      // === Mouse Control ===
-      document.addEventListener("mousemove", (e) => {
-        const xNorm = e.clientX / window.innerWidth;  // 0 to 1
-        const yNorm = e.clientY / window.innerHeight; // 0 to 1
+            fmOsc.start();
 
-        // Map x to playbackRate: 0.25x to 2x
-        player.playbackRate = 0.25 + xNorm * 3.75;
+            // Variables for velocity calculation
+            let lastX = null;
+            let lastY = null;
+            let lastTime = null;
 
-        // Map y to grainSize: 0.01s to 0.3s
-        player.grainSize = 0.01 + (1 - yNorm) * 0.29;
-      });
+            // Mouse move controls frequency, modulation index, and volume
+            document.addEventListener("mousemove", (e) => {
+                const xNorm = e.clientX / window.innerWidth;
+                const yNorm = e.clientY / window.innerHeight;
+                fmOsc.frequency.value = 100 + xNorm * (2000 - 50);
+                fmOsc.modulationIndex.value = 150 + (1 - yNorm) * 59;
+
+                // Velocity calculation
+                const now = performance.now();
+                if (lastX !== null && lastY !== null && lastTime !== null) {
+                    const dx = e.clientX - lastX;
+                    const dy = e.clientY - lastY;
+                    const dt = (now - lastTime) / 1000;
+                    const velocity = Math.sqrt(dx * dx + dy * dy) / dt;
+                    const minVel = 0, maxVel = 2000;
+                    const minVol = -40, maxVol = -10;
+                    const mappedVol = Math.max(minVol, Math.min(maxVol,
+                        minVol + (maxVol - minVol) * (velocity - minVel) / (maxVel - minVel)
+                    ));
+                    fmOsc.volume.value = mappedVol;
+                }
+                lastX = e.clientX;
+                lastY = e.clientY;
+                lastTime = now;
+            });
+
+            // Gate: Envelope triggers on mouse down/up
+            document.addEventListener("mousedown", () => {
+                ampEnv.triggerAttack();
+            });
+            document.addEventListener("mouseup", () => {
+                ampEnv.triggerRelease();
+            });
+      }
+      startFM();
     });
   </script>
 </body>

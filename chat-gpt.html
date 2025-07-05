@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web Audio API Synthesizer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: #eee;
+      text-align: center;
+      padding: 40px;
+    }
+    .controls {
+      margin-top: 20px;
+    }
+    label {
+      display: inline-block;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simple Web Synth</h1>
+  <p>Use keys A, S, D, F, G, H, J to play notes (C-D-E-F-G-A-B)</p>
+  
+  <div class="controls">
+    <label>
+      Waveform:
+      <select id="waveform">
+        <option value="sine">Sine</option>
+        <option value="square">Square</option>
+        <option value="sawtooth">Sawtooth</option>
+        <option value="triangle">Triangle</option>
+      </select>
+    </label>
+
+    <label>
+      Volume:
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
+    </label>
+  </div>
+
+  <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const volumeControl = document.getElementById('volume');
+    const waveformSelect = document.getElementById('waveform');
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.value = volumeControl.value;
+    gainNode.connect(audioCtx.destination);
+
+    const keyMap = {
+      'a': 261.63, // C
+      's': 293.66, // D
+      'd': 329.63, // E
+      'f': 349.23, // F
+      'g': 392.00, // G
+      'h': 440.00, // A
+      'j': 493.88  // B
+    };
+
+    let oscillators = {};
+
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      if (keyMap[key] && !oscillators[key]) {
+        const osc = audioCtx.createOscillator();
+        osc.type = waveformSelect.value;
+        osc.frequency.setValueAtTime(keyMap[key], audioCtx.currentTime);
+        osc.connect(gainNode);
+        osc.start();
+        oscillators[key] = osc;
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      const key = e.key.toLowerCase();
+      if (oscillators[key]) {
+        oscillators[key].stop();
+        delete oscillators[key];
+      }
+    });
+
+    volumeControl.addEventListener('input', () => {
+      gainNode.gain.value = volumeControl.value;
+    });
+
+    waveformSelect.addEventListener('change', () => {
+      // waveform change will only apply to new notes
+    });
+  </script>
+</body>
+</html>
