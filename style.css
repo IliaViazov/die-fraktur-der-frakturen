@@ -11,6 +11,7 @@ html, body {
   width: 100%;
   cursor: url(cursor.svg) 12 12, auto;
 }
+
 canvas {
   display: block;
   position: absolute;
