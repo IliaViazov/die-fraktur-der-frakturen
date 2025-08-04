@@ -34,17 +34,19 @@
         detectAudio: true,
       });
 
-      textCanvas = document.createElement('canvas')
-      ctx = textCanvas.getContext('2d')
-      ctx.font = "20px Arial"
-      ctx.fillStyle = "red";
-      ctx.fillText("fraktur", 100, 50, 500);
+      mainCanvas = document.createElement('canvas')
+      // ctx = textCanvas.getContext('2d')
+      // ctx.font = "20px Arial"
+      // ctx.fillStyle = "red";
+      // ctx.fillText("fraktur", 100, 50, 500);
 
-      s0.init({ src: textCanvas, dynamic: true, setResolution:"200x200" });
+      s0.init({ src: mainCanvas, dynamic: true, setResolution:"200x200" });
       setResolution(window.innerWidth,window.innerHeight);
+      
+      await loadScript("lib-shader.js")
 
       s0 = 
-        voronoi(10, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+        cwarp(Math.random()*5+10, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
           .modulate(o0,0.03)
           .mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
           .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
@@ -52,9 +54,9 @@
           .color(1,.9,.9);
 
       s1 = 
-        voronoi(3, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+        warp(Math.random()*2+3, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
           .modulate(o0,0.03)
-          .mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+          .mult(src(o0).modulateRotate(voronoi(Math.random()*2+20).color(1,2,3).r()),0.2)
           .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
           .modulate(shape().repeat(20).modulateScrollX(noise(100)))
           .thresh(0.5)
@@ -62,21 +64,25 @@
           .modulate(src(o0).repeat(()=>mouse.x/width/200+2),0.2);
 
       s2 = 
-        voronoi(50, ()=>mouse.x/width/50+5, ()=>mouse.y/height*-10)
+        voronoi(Math.random()*10+50, ()=>mouse.x/width/50+5, ()=>mouse.y/height*-10)
           .modulate(o0,0.03)
-          .mult(src(o0).modulateRotate(voronoi(20).color(1,2,3).r()),0.2)
+          .mult(src(o0).modulateRotate(noise(20).color(1,2,3).r()),0.2)
           .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),0.03)
-          .modulate(shape().repeat(20).modulateScrollX(noise(0.5).modulateRotate(osc(200).modulateKaleid(osc(30)))))
+          .modulate(sdfmove().repeat(20).modulateScrollX(whitenoise(0.5).modulateRotate(saw(200).modulateKaleid(osc(30)))))
           .thresh(0.2)
           .color(.99,.85,.8)
           .modulate(src(o0).repeat(()=>mouse.x/width/200+2),0.2)
           .invert()
-          .hue(-0.1);
+          .hue(-0.1).dither2();
 
       s1
-        .blend(s0,()=>mouse.x/width)
-        .mult(s2,()=>(mouse.y)/height)
+        .blend(s0,()=>mouse.x/width*2)
+        .mult(s2,()=>(mouse.y)/height*2)
         .out();
+      // s0 = warp();
+      // s0.out();
+
+      
 
       // === Tone.js FM Synth and GrainPlayer ===
       async function startFM() {
