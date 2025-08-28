@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FM Oscillator Mouse Control</title>
+  <script src="https://unpkg.com/tone@next"></script>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #111;
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body>
+  <button id="startButton" style="display: none; position: absolute; top: 10px; left: 10px; z-index: 10;">Start Audio</button>
+
+  <script>
+    // Create FM Oscillator
+    const bitcrusher = new Tone.BitCrusher({bits: 10, wet: 0.99}).toDestination();
+    const source = new Tone.FatOscillator({
+      frequency: 20,
+      phase: 0,
+      partials: 0,
+      detune: 8+Math.random()*20,
+      spread: 90+Math.random()*10,
+      type: "sine",
+      volume: 0,
+    }).connect(bitcrusher);
+    
+
+    // Start Audio Function
+    async function startAudio() {
+      await Tone.start();
+      source.start();
+      console.log("FM Oscillator started");
+      bitcrusher.start();
+    }
+
+    // Try autoplay on load
+    window.addEventListener('load', async () => {
+      try {
+        await startAudio();
+      } catch (e) {
+        document.getElementById('startButton').style.display = 'block';
+      }
+    });
+
+    // Fallback button if autoplay fails
+    document.getElementById('startButton').addEventListener('click', async () => {
+      await startAudio();
+      document.getElementById('startButton').style.display = 'none';
+    });
+
+    // Mouse move event to control pitch via X-axis
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      const width = window.innerWidth;
+
+      // Map X position to frequency range (e.g., 100 Hz to 1000 Hz)
+      const minFreq = 9.95;
+      const maxFreq = 10;
+      const minInd = 900.0;
+      const maxInd = 1000.0;
+      const freq = minFreq + (x / width) * (maxFreq - minFreq);
+      const harm = minInd + (y / width) * (maxInd - minInd);
+    });
+
+    setInterval(()=>{
+        source.detune += (Math.random()-0.5)*0.01;
+        source.spread += (Math.random()-0.5)*0.01;
+    }, 10);
+  </script>
+</body>
+</html>
