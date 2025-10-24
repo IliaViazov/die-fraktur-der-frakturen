@@ -24,28 +24,39 @@
   <canvas id="myCanvas"></canvas>
 
   <script>
-    // provide optional config object (or undefined). Defaults shown.
-    const config = {
-    binaryThresh: 0.5,
-    hiddenLayers: [3], // array of ints for the sizes of the hidden layers in the network
-    activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
-    leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
-    };
+    // const config = {
+    // hiddenLayers: [16, 16],
+    // activation: 'sigmoid',
+    // };
 
-// create a simple feed-forward neural network with backpropagation
-    const net = new brain.NeuralNetwork(config);
+    // // Helper: Generate random training data
+    // function generateTrainingData(numSamples, inputSize, outputSize) {
+    // const data = [];
+    // for (let i = 0; i < numSamples; i++) {
+    //     const input = Array.from({ length: inputSize }, () => Math.random());
+    //     const output = Array.from({ length: outputSize }, () => Math.random());
+    //     data.push({ input, output });
+    // }
+    // return data;
+    // }
 
-    net.train([
-    { input: [0, 0], output: [0] },
-    { input: [0, 1], output: [1] },
-    { input: [1, 0], output: [1] },
-    { input: [1, 1], output: [0] },
-    ]);
+    // // Create and train mouse_net (2 inputs → 8 outputs)
+    // const mouse_net = new brain.NeuralNetwork(config);
+    // const mouseData = generateTrainingData(20, 2, 8);
+    // mouse_net.train(mouseData, {
+    // iterations: 10,
+    // log: true,
+    // logPeriod: 100,
+    // });
 
-    console.log(net.run([1, 0])); // [0.987]
-
-
-
+    // // Create and train fft_net (32 inputs → 8 outputs)
+    // const fft_net = new brain.NeuralNetwork(config);
+    // const fftData = generateTrainingData(20, 32, 8);
+    // fft_net.train(fftData, {
+    // iterations: 10,
+    // log: true,
+    // logPeriod: 200,
+    // });
 
     //======Old code
 
@@ -102,22 +113,10 @@
       async function startSynthesis() {
         await Tone.start();
         
-        function ffr(destination) {
-        // Create an FFT analyzer
-            const fft = new Tone.FFT(32); // 128 bins; you can increase to 512, 1024, etc.
-    
-            // Connect destination -> FFT
-            destination.connect(fft);
+        const fft = new Tone.FFT(32); // 128 bins; you can increase to 512, 1024, etc.
+        // Connect destination -> FFT
+        Tone.Destination.connect(fft);
 
-            // Function to update and print data
-            function update() {
-                const values = fft.getValue(); // returns Float32Array of amplitudes in dB
-                console.log(Array.from(values)); // print as plain list
-                requestAnimationFrame(update);   // keep reading continuously
-            }
-            update();
-            return fft;
-        }
         // FX
         const pitchshift = new Tone.PitchShift();
         const reverb = new Tone.Reverb();
@@ -216,7 +215,12 @@
             fmOsc.harmonicity.rampTo(newHarm, 0.1)  
         }, 100);
 
-        // console.log(ffr(Tone.Destination));
+        // //network update
+        // setInterval(() => {
+        //     console.log('mouse_net output:', mouse_net.run([mouse.x, mouse.y]));
+        //     console.log([mouse.x, mouse.y])
+        //     console.log('fft_net output:', fft_net.run(fft.getValue()));
+        // }, 1000)
       }
       startSynthesis();
     });
