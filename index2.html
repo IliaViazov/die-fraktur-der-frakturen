@@ -24,41 +24,32 @@
   <canvas id="myCanvas"></canvas>
 
   <script>
-    // const config = {
-    // hiddenLayers: [16, 16],
-    // activation: 'sigmoid',
-    // };
+        const config1 = {
+        binaryThresh: 0.5,
+        // hiddenLayers: [16, 5, 7, 8], // array of ints for the sizes of the hidden layers in the network
+        activation: 'sigmoid', // supported activation types: ['sigmoid', 'relu', 'leaky-relu', 'tanh'],
+        leakyReluAlpha: 0.01, // supported for activation type 'leaky-relu'
+        };
 
-    // // Helper: Generate random training data
-    // function generateTrainingData(numSamples, inputSize, outputSize) {
-    // const data = [];
-    // for (let i = 0; i < numSamples; i++) {
-    //     const input = Array.from({ length: inputSize }, () => Math.random());
-    //     const output = Array.from({ length: outputSize }, () => Math.random());
-    //     data.push({ input, output });
-    // }
-    // return data;
-    // }
+    // Helper: Generate random training data
+    function generateTrainingData(numSamples, inputSize, outputSize, coeff) {
+    const data = [];
+    for (let i = 0; i < numSamples; i++) {
+        const input = Array.from({ length: inputSize }, () => Math.random()*coeff);
+        const output = Array.from({ length: outputSize }, () => Math.random()*coeff);
+        data.push({ input, output });
+    }
+    return data;
+    }
 
-    // // Create and train mouse_net (2 inputs → 8 outputs)
-    // const mouse_net = new brain.NeuralNetwork(config);
-    // const mouseData = generateTrainingData(20, 2, 8);
-    // mouse_net.train(mouseData, {
-    // iterations: 10,
-    // log: true,
-    // logPeriod: 100,
-    // });
-
-    // // Create and train fft_net (32 inputs → 8 outputs)
-    // const fft_net = new brain.NeuralNetwork(config);
-    // const fftData = generateTrainingData(20, 32, 8);
-    // fft_net.train(fftData, {
-    // iterations: 10,
+    // Create and train fft_net (32 inputs → 8 outputs)
+    const fft_net = new brain.NeuralNetwork(config1);
+    const fftData = generateTrainingData(3, 32, 8, 1);
+    fft_net.train(fftData, {
+    iterations: 10,
     // log: true,
     // logPeriod: 200,
-    // });
-
-    //======Old code
+    });
 
     const startButton = document.getElementById("startButton");
 
@@ -71,15 +62,7 @@
         detectAudio: true,
       });
 
-    //   mainCanvas = document.createElement('canvas');
-    //   ctx = myCanvas.getContext('2d');
-    //   ctx.font = "20px Arial"
-    //   ctx.fillStyle = "red";
-    //   ctx.fillText("fraktur", 100, 50, 500);
-
-    //   s0.init({ src: mainCanvas, dynamic: true, setResolution:"200x200" });
       setResolution(window.innerWidth,window.innerHeight);
-      
       await loadScript("lib-shader.js")
       
       s0 = 
@@ -215,12 +198,12 @@
             fmOsc.harmonicity.rampTo(newHarm, 0.1)  
         }, 100);
 
-        // //network update
-        // setInterval(() => {
-        //     console.log('mouse_net output:', mouse_net.run([mouse.x, mouse.y]));
-        //     console.log([mouse.x, mouse.y])
-        //     console.log('fft_net output:', fft_net.run(fft.getValue()));
-        // }, 1000)
+        //network update
+        setInterval(() => {
+            // console.log('mouse_net output:', mouse_net.run([mouse.x*100, mouse.y*100]));
+            // console.log([mouse.x, mouse.y])
+            console.log('fft_net output:', fft_net.run(fft.getValue()));
+        }, 1000)
       }
       startSynthesis();
     });
