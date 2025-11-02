@@ -16,17 +16,58 @@
     body.big-cursor {
       cursor: url('cursor-big.svg') 32 32, auto;
     }
-  </style>
+  #startButton {
+    position: fixed;
+    top: 30%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    z-index: 2;
+  }
+
+  .intro-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    max-width: 600px;
+    padding: 20px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 8px;
+    margin-top: 0; /* Remove margin-top */
+  }
+</style>
 </head>
 <body>
-  <button id="startButton">Die Fraktur der Frakturen</button>
+  <button id="startButton">Ilia Viazov <br>Die Fraktur der Frakturen</button>
+  <div id="introText" class="intro-text">
+    <p>Last time I saw this face, it was scattered around.<br>
+        I couldn’t recognise it.<br><br>
+
+        Last time I heard this voice, <br>
+        I couldn’t understand any word of it.<br>
+        Everything that I heard was just moaning.<br>
+        <br>
+        The memories are split into shards,<br>
+        They can’t make any sense by themselves,<br>
+        They can’t make any sense together either,<br>
+        They give only a resemblance of memory, which was gone long ago.<br>
+        <br>
+        The rest between them is the speechless void.<br>
+      </p>
+  </div>
   <canvas id="myCanvas"></canvas>
 
   <script>
     const startButton = document.getElementById("startButton");
+    const introText = document.getElementById("introText");
 
     startButton.addEventListener("click", async () => {
       startButton.style.display = "none";
+      introText.style.display = "none";
 
       var i1 = 0;
       var i2 = 0;
@@ -89,7 +130,7 @@
       // === Hydra visuals ===
       const hydra = new Hydra({
         canvas: document.getElementById("myCanvas"),
-        detectAudio: true,
+        detectAudio: false,
       });
 
       setResolution(window.innerWidth,window.innerHeight);
