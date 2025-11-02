@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>die-fraktur-der-frakturen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- Hydra -->
+  <script src="hydra-engine.js"></script>
+  <!-- Tone.js -->
+  <script src="tone-js-engine.txt"></script>
+  <style>
+    body {
+      cursor: url('cursor.svg') 16 16, auto;
+    }
+    body.big-cursor {
+      cursor: url('cursor-big.svg') 32 32, auto;
+    }
+  </style>
+</head>
+<body>
+  <button id="startButton">Die Fraktur der Frakturen</button>
+  <canvas id="myCanvas"></canvas>
+
+  <script>
+    const startButton = document.getElementById("startButton");
+
+    startButton.addEventListener("click", async () => {
+      startButton.style.display = "none";
+
+      var i1 = 0;
+      var i2 = 0;
+      var a1 = 0;
+      var a2 = 0;
+      var a3 = 0;
+      var a4 = 0;
+      var a5 = 0;
+      var a6 = 0;
+      var a7 = 0;
+      var a8 = 0;
+      var a9 = 0;
+      var a10 = 0;
+      var a11 = 0;
+      var a12 = 0;
+      var a13 = 0;
+      var a14 = 0;
+      var a15 = 0;
+      var a16 = 0;
+      var a17 = 0;
+      var a18 = 0;
+      var a19 = 0;
+      var a20 = 0;
+      var a21 = 0;
+      var a22 = 0;
+      var kubik = 0;
+
+      var array_fft = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+      for (let i = 0; i < 100; i++) {
+        var i1 = (Math.random() + i1)/2.0
+        var i2 = (Math.random() + i2)/2.0
+        var a1 = (Math.random() + i2)/2.0
+        var a2 = (Math.random() + i2)/2.0
+        var a3 = (Math.random() + i2)/2.0
+        var a4 = (Math.random() + i2)/2.0
+        var a5 = (Math.random() + i2)/2.0
+        var a6 = (Math.random() + i2)/2.0
+        var a7 = (Math.random() + i2)/2.0
+        var a8 = (Math.random() + i2)/2.0
+        var a9 = (Math.random() + i2)/2.0
+        var a10 = (Math.random() + i2)/2.0
+        var a11 = (Math.random() + i2)/2.0
+        var a12 = (Math.random() + i2)/2.0
+        var a13 = (Math.random() + i1)/2.0
+        var a14 = (Math.random() + i2)/2.0
+        var a15 = (Math.random() + i2)/2.0
+        var a16 = (Math.random() + i2)/2.0
+        var a17 = (Math.random() + i2)/2.0
+        var a18 = (Math.random() + i2)/2.0
+        var a19 = (Math.random() + i2)/2.0
+        var a20 = (Math.random() + i2)/2.0
+        var a21 = (Math.random() + i2)/2.0
+        var a22 = (Math.random() + i2)/2.0
+        var i2 = (Math.random() + i2)/2.0
+        var kubik = ((Math.random()*6) + kubik)/2.0
+        console.log(kubik);
+      }
+
+      // === Hydra visuals ===
+      const hydra = new Hydra({
+        canvas: document.getElementById("myCanvas"),
+        detectAudio: true,
+      });
+
+      setResolution(window.innerWidth,window.innerHeight);
+      
+      s0 = 
+        voronoi(() => 10+a1*5, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+        .modulate(o0,() => 0.03+a2*0.1)
+        .mult(src(o0).modulateRotate(voronoi(() => 20+a3*5).color(() => 1, () => 2,() => 3).r()),() => 0.2+a4*0.1)
+        .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),() => 0.03+a5*0.1)
+        .thresh(() => 0.5+a6*0.1)
+        .color(() => 1,() => 0.9+a7*0.01,() => 0.9+a8*0.01)
+
+      s1 = 
+        voronoi(() => 3+a9*5, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+        .modulate(o0,() => 0.03)
+        .mult(src(o0).modulateRotate(voronoi(() => 20+a10).color(() => 1,() => 2,() => 3).r()),() => 0.2+a11*0.01)
+        .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),() => 0.03)
+        .modulate(shape().repeat(() => 20+a12*5).modulateScrollX(noise(() => 100)))
+        .thresh(() => 0.5+a13*0.1)
+        .color(() => 1,() => .9+a15*0.01,() => .85+a16*0.1)
+        .modulate(src(o0).repeat(()=>mouse.x/width/200+2),() => 0.2)
+
+      s2 = 
+        voronoi(() => 20+a17*5, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
+        .modulate(o0,() => 0.06+a18*0.1)
+        .mult(src(o0).modulateRotate(voronoi(() => 10+a19*5)),() => 0.2+a20*0.1)
+        .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),() => 0.3+a21*0.1)
+        .thresh(() => 0.5+a22*0.1);
+        // .color(1,.9+Math.random()*0.01,.9+Math.random()*0.01)
+      
+      // kubik = 0.3;
+      console.log("before if", kubik);
+      if (0.0 < kubik && kubik <= 1.0) {
+        console.log("0-1");
+        console.log("in if", kubik);
+        s0
+        .blend(s1,()=>(mouse.x/(width*2*i1)))
+        .blend(s2, ()=>(mouse.y/(height*2*i2)))
+        .brightness(() => {
+          const val = (time - 10) * 0.1;
+          // console.log("brightness val", val);
+          return Math.min(val, 0); // clamp between 0–1
+        })
+        .out()
+      } else if (1.0 < kubik && kubik <= 2.0) {
+        console.log("1-2");
+        console.log("in if", kubik);
+        s0
+        .blend(s2,()=>(mouse.x/(width*2*i1)))
+        .blend(s1, ()=>(mouse.y/(height*2*i2)))
+        .brightness(() => {
+          const val = (time - 10) * 0.1;
+          // console.log("brightness val", val);
+          return Math.min(val, 0); // clamp between 0–1
+        })
+        .out();
+      } else if (2.0 < kubik && kubik <= 3.0){
+        console.log("2-3");
+        console.log("in if", kubik);
+        s1
+        .blend(s0,()=>(mouse.x/(width*2*i1)))
+        .blend(s2, ()=>(mouse.y/(height*2*i2)))
+        .brightness(() => {
+          const val = (time - 10) * 0.1;
+          // console.log("brightness val", val);
+          return Math.min(val, 0); // clamp between 0–1
+        })
+        .out();
+      } else if (3.0 < kubik && kubik <= 4.0){
+        console.log("3-4");
+        console.log("in if", kubik);
+        s1
+        .blend(s2,()=>(mouse.x/(width*2*i1)))
+        .blend(s0, ()=>(mouse.y/(height*2*i2)))
+        .brightness(() => {
+          const val = (time - 10) * 0.1;
+          // console.log("brightness val", val);
+          return Math.min(val, 0); // clamp between 0–1
+        })
+        .out();
+      } else if (4.0 < kubik && kubik <= 5.0){
+        console.log("4-5");
+        console.log("in if", kubik);
+        s2
+        .blend(s0,()=>(mouse.x/(width*2*i1)))
+        .blend(s1, ()=>(mouse.y/(height*2*i2)))
+        .brightness(() => {
+          const val = (time - 10) * 0.1;
+          // console.log("brightness val", val);
+          return Math.min(val, 0); // clamp between 0–1
+        })
+        .out();
+      } else if (5.0 < kubik && kubik <= 6.0){
+        console.log("5-6");
+        console.log("in if", kubik);
+        s2
+        .blend(s1,()=>(mouse.x/(width*2*i1)))
+        .blend(s0, ()=>(mouse.y/(height*2*i2)))
+        .brightness(() => {
+          const val = (time - 10) * 0.1;
+          // console.log("brightness val", val);
+          return Math.min(val, 0); // clamp between 0–1
+        })
+        .out();
+      }
+      
+      // === Tone.js FM Synth and GrainPlayer ===
+      async function startSynthesis() {
+        await Tone.start();
+        
+        const fft = new Tone.FFT({
+          size: 32,
+          smoothing: 10.0
+        });
+        
+        // Connect destination -> FFT
+        Tone.Destination.connect(fft);
+
+        // FX
+        const pitchshift = new Tone.PitchShift();
+        const reverb = new Tone.Reverb();
+        const distortion = new Tone.Distortion(0.8);
+        const feedbackDelay = new Tone.FeedbackDelay(0.001, 0.9);
+        const crusher = new Tone.BitCrusher(4);
+        const eq = new Tone.EQ3({
+          low: 0
+        });
+        const limiter = new Tone.Limiter(-20).toDestination();
+
+        // Synth1
+        const fmOsc = new Tone.FMOscillator({
+          frequency: 0,
+          type: "sine",
+          modulationType: "sine",
+          harmonicity: 2,
+          modulationIndex: 10,
+          volume: -60
+        }).connect(feedbackDelay);
+
+        feedbackDelay.connect(pitchshift);
+        pitchshift.connect(distortion);
+        distortion.connect(reverb);
+        crusher.connect(reverb);
+
+        reverb.connect(eq);
+        eq.connect(limiter);
+
+        //Synth_drone
+        const fmOsc2 = new Tone.FMOscillator({
+          frequency: 10,
+          type: "triangle",
+          modulationType: "triangle",
+          harmonicity: 2.5,
+          modulationIndex: 6,
+          volume: -100
+        }).connect(distortion);
+
+        //Synth_spawn
+        const fmOsc3 = new Tone.FMOscillator({
+          frequency: 10,
+          type: "triangle",
+          modulationType: "triangle",
+          harmonicity: 2.5,
+          modulationIndex: 6,
+          volume: -100
+        })
+
+        fmOsc.start();
+        fmOsc2.start();
+
+
+        // Variables for velocity calculation
+        let lastX = null;
+        let lastY = null;
+        let lastTime = null;
+        
+        // Mouse move controls everything
+        document.addEventListener("mousemove", (e) => {
+          var xNorm = 0;
+          var yNorm = 0;
+          if (0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 1.0) {
+            xNorm = e.clientX / window.innerWidth;
+            yNorm = e.clientY / window.innerHeight;
+          } else if (1.0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 2.0) {
+            xNorm = e.clientX / window.innerWidth;
+            yNorm = 1.0-(e.clientY / window.innerHeight);
+          } else if (2.0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 3.0) {
+            xNorm = 1.0-(e.clientX / window.innerWidth);
+            yNorm = e.clientY / window.innerHeight;
+          } else if (3.0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 4.0) {
+            xNorm = 1.0-(e.clientX / window.innerWidth);
+            yNorm = 1.0-(e.clientY / window.innerHeight);
+          } 
+          fmOsc.frequency.value =  xNorm * (25);
+          fmOsc.modulationIndex.value = (1 - yNorm) * 30; 
+
+
+          // Velocity calculation for FM synth volume
+          const now = performance.now();
+          if (lastX !== null && lastY !== null && lastTime !== null) {
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+            const dt = (now - lastTime) / 1000;
+            const velocity = Math.sqrt(dx * dx + dy * dy) / dt;
+            const minVel = 0, maxVel = 2000;
+            const minVol = -40, maxVol = -20;
+            const mappedVol = Math.max(minVol, Math.min(maxVol,
+              minVol + (maxVol - minVol) * (velocity - minVel) / (maxVel - minVel)
+            ));
+            fmOsc.volume.value = mappedVol;
+          }
+          lastX = e.clientX;
+          lastY = e.clientY;
+          lastTime = now;
+        });
+
+        setTimeout(() => {
+            fmOsc2.volume.exponentialRampTo(-40, 2.5);
+        },0);
+
+        setInterval(() => {
+            const newFreq = 10 + Math.random() * 2;
+            const newModulation = 10 + Math.random() * 30;
+            const newHarm = 1.5 + Math.random() * 1;
+
+            fmOsc2.frequency.rampTo(newFreq, 10.0);
+            fmOsc2.modulationIndex.rampTo(newModulation, 10.0);  
+            fmOsc2.harmonicity.rampTo(newHarm, 10.0);           
+        }, 10000);
+
+        setInterval(() => {
+            const newDelay = (Math.sin(performance.now()*2000)*Math.random()+1) * 0.0002;
+            const newFeedback = Math.random()*0.1 + 0.9;
+            var newHarm = fmOsc.harmonicity.value
+            var newLow = (mouse.y/window.innerHeight)*12.0
+
+            if (Math.random() >= 0.5){
+                newHarm += Math.random()
+            } else {newHarm -= Math.random()}
+            
+            feedbackDelay.delayTime.rampTo(newDelay, 0.1);  
+            feedbackDelay.feedback.rampTo(newFeedback, 0.1);
+            fmOsc.harmonicity.rampTo(newHarm, 0.1)  
+
+            eq.low.rampTo(newLow, 0.1);
+        }, 100);
+
+        setInterval(() => {
+            var trans_array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+            fft.getValue().forEach(function(value, i) {
+              trans_array[i] = ((value+240)/120.0);
+            });
+            for (let i = 0; i < 100; i++) {
+              array_fft.forEach(function(value, index){
+                t = index/100.0
+                array_fft[index] = (1-(-0.5 * ( Math.cos( Math.PI * t ) - 1 )))*value + ((-0.5 * ( Math.cos( Math.PI * t ) - 1 )))*trans_array[index]
+              })
+            }
+        }, 100)
+
+      }
+      startSynthesis();
+    });
+  </script>
+</body>
+</html>
