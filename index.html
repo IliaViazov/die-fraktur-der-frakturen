@@ -94,6 +94,7 @@
       var a21 = 0;
       var a22 = 0;
       var kubik = 0;
+      var kubik2 = 0;
 
       var array_fft = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
@@ -124,6 +125,7 @@
         var a22 = (Math.random() + i2)/2.0
         var i2 = (Math.random() + i2)/2.0
         var kubik = ((Math.random()*6) + kubik)/2.0
+        var kubik = ((Math.random()*4) + kubik)/2.0
         console.log(kubik);
       }
 
@@ -311,16 +313,16 @@
         document.addEventListener("mousemove", (e) => {
           var xNorm = 0;
           var yNorm = 0;
-          if (0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 1.0) {
+          if (0 < kubik2 && kubik2 <= 1.0) {
             xNorm = e.clientX / window.innerWidth;
             yNorm = e.clientY / window.innerHeight;
-          } else if (1.0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 2.0) {
+          } else if (1.0 < kubik2 && kubik2 <= 2.0) {
             xNorm = e.clientX / window.innerWidth;
             yNorm = 1.0-(e.clientY / window.innerHeight);
-          } else if (2.0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 3.0) {
+          } else if (2.0 < kubik2 && kubik2 <= 3.0) {
             xNorm = 1.0-(e.clientX / window.innerWidth);
             yNorm = e.clientY / window.innerHeight;
-          } else if (3.0 < kubik/6.0*4.0 && kubik/6.0*4.0 <= 4.0) {
+          } else if (3.0 < kubik2 && kubik2 <= 4.0) {
             xNorm = 1.0-(e.clientX / window.innerWidth);
             yNorm = 1.0-(e.clientY / window.innerHeight);
           } 
