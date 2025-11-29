@@ -19,7 +19,7 @@
   #startButton {
     position: fixed;
     top: 30%;
-    left: 30%;
+    left: 40%;
     transform: translate(-50%, -50%);
     text-align: left;
     z-index: 2;
@@ -123,6 +123,13 @@
         var a20 = (Math.random() + i2)/2.0
         var a21 = (Math.random() + i2)/2.0
         var a22 = (Math.random() + i2)/2.0
+        var a23 = (Math.random() + i2)/2.0
+        var a24 = (Math.random() + i2)/2.0
+        var a25 = (Math.random() + i2)/2.0
+        var a26 = (Math.random() + i2)/2.0
+        var a27 = (Math.random() + i2)/2.0
+        var a28 = (Math.random() + i2)/2.0
+        var a29 = (Math.random() + i2)/2.0
         var i2 = (Math.random() + i2)/2.0
         var kubik = ((Math.random()*6) + kubik)/2.0
         var kubik2 = ((Math.random()*4) + kubik2)/2.0
@@ -136,18 +143,27 @@
       });
 
       setResolution(window.innerWidth,window.innerHeight);
+      // ()=>pressedTime = press ? (pressedTime+sensitivity)%1 : pressedTime
+      trigger = 0;
+      press = false;
+      counter = 0;
+      onpointerdown = () => { press = true; trigger = Math.random() }
+      onpointerup = () => { press = false }
+      pressedTime = 0; sensitivity = 0.001;
+      mod = 0;
+      direction = "up";
       
       s0 = 
         voronoi(() => 10+a1*5, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
         .modulate(o0,() => 0.03+a2*0.1)
-        .mult(src(o0).modulateRotate(voronoi(() => 20+a3*5).color(() => 1, () => 2,() => 3).r()),() => 0.2+a4*0.1)
+        .mult(src(o0).modulateRotate(voronoi(() => 20+a3*5).color(() => 1, () => 2,() => 3).r()), 0.1)
         .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),() => 0.03+a5*0.1)
         .thresh(() => 0.5+a6*0.1)
         .color(() => 1,() => 0.9+a7*0.01,() => 0.9+a8*0.01)
 
       s1 = 
         voronoi(() => 3+a9*5, ()=>mouse.x/width/200+0.5, ()=>mouse.y/height*-5)
-        .modulate(o0,() => 0.03)
+        .modulateRotate(o0,() => (0.03+trigger*Math.sin(time/10)*mod*0.5)+Math.random()*0.001)
         .mult(src(o0).modulateRotate(voronoi(() => 20+a10).color(() => 1,() => 2,() => 3).r()),() => 0.2+a11*0.01)
         .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/10),() => 0.03)
         .modulate(shape().repeat(() => 20+a12*5).modulateScrollX(noise(() => 100)))
@@ -163,6 +179,13 @@
         .thresh(() => 0.5+a22*0.1);
         // .color(1,.9+Math.random()*0.01,.9+Math.random()*0.01)
       
+      s3 = 
+      voronoi(() => 30+a23*5, ()=>mouse.x/width/300+0.5, ()=>mouse.y/height*-5)
+        .modulate(o0,() => 0.08+a24*0.21)
+        .mult(src(o0).modulateRotate(voronoi(() => 20+a25*5)),() => 0.3+a26*0.4)
+        .modulateScrollX(src(o0).scrollX(()=>mouse.x/width/30),() => 0.5+a27*0.2)
+        .thresh(() => 0.5+a28*0.1).r().brightness(() => Math.sin(time*(a29+1)*70*Math.random()*30*(mouse.y/height/2+0.5))*0.03*(mouse.x/width/2+0.5));
+      
       // kubik = 0.3;
       console.log("before if", kubik);
       if (0.0 < kubik && kubik <= 1.0) {
@@ -171,6 +194,7 @@
         s0
         .blend(s1,()=>(mouse.x/(width*2*i1)))
         .blend(s2, ()=>(mouse.y/(height*2*i2)))
+        .add(s3, () => mod = press? 1 : 0)
         .brightness(() => {
           const val = (time - 10) * 0.1;
           // console.log("brightness val", val);
@@ -183,6 +207,7 @@
         s0
         .blend(s2,()=>(mouse.x/(width*2*i1)))
         .blend(s1, ()=>(mouse.y/(height*2*i2)))
+        .sub(s3, () => mod = press? 1 : 0)
         .brightness(() => {
           const val = (time - 10) * 0.1;
           // console.log("brightness val", val);
@@ -195,6 +220,7 @@
         s1
         .blend(s0,()=>(mouse.x/(width*2*i1)))
         .blend(s2, ()=>(mouse.y/(height*2*i2)))
+        .mult(s3, () => mod = press? 1 : 0)
         .brightness(() => {
           const val = (time - 10) * 0.1;
           // console.log("brightness val", val);
@@ -207,6 +233,7 @@
         s1
         .blend(s2,()=>(mouse.x/(width*2*i1)))
         .blend(s0, ()=>(mouse.y/(height*2*i2)))
+        .add(s3, () => mod = press? 1 : 0)
         .brightness(() => {
           const val = (time - 10) * 0.1;
           // console.log("brightness val", val);
@@ -219,6 +246,7 @@
         s2
         .blend(s0,()=>(mouse.x/(width*2*i1)))
         .blend(s1, ()=>(mouse.y/(height*2*i2)))
+        .sub(s3, () => mod = press? 1 : 0)
         .brightness(() => {
           const val = (time - 10) * 0.1;
           // console.log("brightness val", val);
@@ -231,6 +259,7 @@
         s2
         .blend(s1,()=>(mouse.x/(width*2*i1)))
         .blend(s0, ()=>(mouse.y/(height*2*i2)))
+        .mult(s3, () => mod = press? 1 : 0)
         .brightness(() => {
           const val = (time - 10) * 0.1;
           // console.log("brightness val", val);
@@ -260,6 +289,7 @@
         const eq = new Tone.EQ3({
           low: 0
         });
+        const tremolo = new Tone.Tremolo(1000, 1);
         const limiter = new Tone.Limiter(-20).toDestination();
 
         // Synth1
@@ -292,16 +322,18 @@
 
         //Synth_spawn
         const fmOsc3 = new Tone.FMOscillator({
-          frequency: 10,
-          type: "triangle",
-          modulationType: "triangle",
-          harmonicity: 2.5,
-          modulationIndex: 6,
+          frequency: 1000,
+          type: "square",
+          modulationType: "square",
+          harmonicity: 1.01,
+          modulationIndex: 1000,
           volume: -100
-        })
+        }).connect(tremolo);
+        tremolo.connect(distortion);
 
         fmOsc.start();
         fmOsc2.start();
+        fmOsc3.start();
 
 
         // Variables for velocity calculation
@@ -310,6 +342,15 @@
         let lastTime = null;
         
         // Mouse move controls everything
+        document.addEventListener("mousedown", (e) => {
+          fmOsc3.volume.rampTo(0, 0.0);  // change amplitude on click
+          fmOsc3.frequency.value = Math.random()*4000+500;        
+        })
+
+        document.addEventListener("mouseup", (e) => {
+          fmOsc3.volume.rampTo(-100, 0.0);  // change amplitude on click
+        })
+
         document.addEventListener("mousemove", (e) => {
           var xNorm = 0;
           var yNorm = 0;
@@ -327,7 +368,10 @@
             yNorm = 1.0-(e.clientY / window.innerHeight);
           } 
           fmOsc.frequency.value =  xNorm * (25);
-          fmOsc.modulationIndex.value = (1 - yNorm) * 30; 
+          fmOsc.modulationIndex.value = (1 - yNorm) * 30;
+          
+          fmOsc3.modulationIndex.value = 1000+Math.random()*300+1000*Math.sin(time)+500*(1-xNorm);
+          fmOsc3.harmonicity.value = Math.random()*0.1+1.01+0.2*yNorm;
 
 
           // Velocity calculation for FM synth volume
@@ -338,7 +382,7 @@
             const dt = (now - lastTime) / 1000;
             const velocity = Math.sqrt(dx * dx + dy * dy) / dt;
             const minVel = 0, maxVel = 2000;
-            const minVol = -40, maxVol = -20;
+            const minVol = -30, maxVol = -15;
             const mappedVol = Math.max(minVol, Math.min(maxVol,
               minVol + (maxVol - minVol) * (velocity - minVel) / (maxVel - minVel)
             ));
@@ -350,7 +394,7 @@
         });
 
         setTimeout(() => {
-            fmOsc2.volume.exponentialRampTo(-40, 2.5);
+            fmOsc2.volume.exponentialRampTo(-35, 2.5);
         },0);
 
         setInterval(() => {
@@ -368,6 +412,7 @@
             const newFeedback = Math.random()*0.1 + 0.9;
             var newHarm = fmOsc.harmonicity.value
             var newLow = (mouse.y/window.innerHeight)*12.0
+            var newTremolo = 1000+(mouse.x/window.innerWidth)*Math.sin(500*time)*300
 
             if (Math.random() >= 0.5){
                 newHarm += Math.random()
@@ -375,24 +420,11 @@
             
             feedbackDelay.delayTime.rampTo(newDelay, 0.1);  
             feedbackDelay.feedback.rampTo(newFeedback, 0.1);
-            fmOsc.harmonicity.rampTo(newHarm, 0.1)  
+            fmOsc.harmonicity.rampTo(newHarm, 0.1);
+            tremolo.frequency.rampTo(newTremolo, 0.1);
 
             eq.low.rampTo(newLow, 0.1);
         }, 100);
-
-        setInterval(() => {
-            var trans_array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-
-            fft.getValue().forEach(function(value, i) {
-              trans_array[i] = ((value+240)/120.0);
-            });
-            for (let i = 0; i < 100; i++) {
-              array_fft.forEach(function(value, index){
-                t = index/100.0
-                array_fft[index] = (1-(-0.5 * ( Math.cos( Math.PI * t ) - 1 )))*value + ((-0.5 * ( Math.cos( Math.PI * t ) - 1 )))*trans_array[index]
-              })
-            }
-        }, 100)
 
       }
       startSynthesis();
