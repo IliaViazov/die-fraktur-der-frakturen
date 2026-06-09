@@ -1,0 +1,221 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000000000000000000000001 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888888888888888888888888 /* ViewController.swift */; };
+		000000000000000000000002 /* Website in Resources */ = {isa = PBXBuildFile; fileRef = aaaaaaaaaaaaaaaaabbbbbbbb /* Website */; };
+		000000000000000000000003 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = cccccccccccccccccccccccc /* UIKit.framework */; };
+		000000000000000000000004 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = dddddddddddddddddddddddd /* WebKit.framework */; };
+		020202020202020202020202 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010101010101010101010101 /* Assets.xcassets */; };
+		eeeeeeeeeeeeeeeeeeeeeeee /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666666666666666666666667 /* AppDelegate.swift */; };
+		ffffffffffffffffffffffff /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777777777777777777777777 /* SceneDelegate.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00000000000000000000000c /* DieFraktur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = DieFraktur.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		010101010101010101010101 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = iPadApp/Assets.xcassets; sourceTree = "<group>"; };
+		666666666666666666666667 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = iPadApp/AppDelegate.swift; sourceTree = "<group>"; };
+		777777777777777777777777 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = iPadApp/SceneDelegate.swift; sourceTree = "<group>"; };
+		888888888888888888888888 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = iPadApp/ViewController.swift; sourceTree = "<group>"; };
+		999999999999999999999999 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = iPadApp/Info.plist; sourceTree = "<group>"; };
+		aaaaaaaaaaaaaaaaabbbbbbbb /* Website */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Website; path = iPadApp/Website; sourceTree = "<group>"; };
+		cccccccccccccccccccccccc /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = file.framework; path = UIKit.framework; sourceTree = SDKROOT; };
+		dddddddddddddddddddddddd /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = file.framework; path = WebKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000000000007 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000003 /* UIKit.framework in Frameworks */,
+				000000000000000000000004 /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		222222222222222222222222 = {
+			isa = PBXGroup;
+			children = (
+				333333333333333333333333 /* Sources */,
+				444444444444444444444444 /* Resources */,
+				555555555555555555555555 /* Products */,
+				666666666666666666666666 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		333333333333333333333333 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				666666666666666666666667 /* AppDelegate.swift */,
+				777777777777777777777777 /* SceneDelegate.swift */,
+				888888888888888888888888 /* ViewController.swift */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		444444444444444444444444 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				999999999999999999999999 /* Info.plist */,
+				aaaaaaaaaaaaaaaaabbbbbbbb /* Website */,
+				010101010101010101010101 /* Assets.xcassets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		555555555555555555555555 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00000000000000000000000c /* DieFraktur.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		666666666666666666666666 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				cccccccccccccccccccccccc /* UIKit.framework */,
+				dddddddddddddddddddddddd /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		000000000000000000000008 /* DieFraktur */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00000000000000000000000d /* Build configuration list for PBXNativeTarget "DieFraktur" */;
+			buildPhases = (
+				000000000000000000000005 /* Sources */,
+				000000000000000000000006 /* Resources */,
+				000000000000000000000007 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DieFraktur;
+			productName = DieFraktur;
+			productReference = 00000000000000000000000c /* DieFraktur.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		111111111111111111111111 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1430;
+				ORGANIZATIONNAME = "Your Organization";
+			};
+			buildConfigurationList = 00000000000000000000000b /* Build configuration list for PBXProject "iPadApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+				Base,
+			);
+			mainGroup = 222222222222222222222222;
+			productRefGroup = 555555555555555555555555 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				000000000000000000000008 /* DieFraktur */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		000000000000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				000000000000000000000002 /* Website in Resources */,
+				020202020202020202020202 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		000000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				eeeeeeeeeeeeeeeeeeeeeeee /* AppDelegate.swift in Sources */,
+				ffffffffffffffffffffffff /* SceneDelegate.swift in Sources */,
+				000000000000000000000001 /* ViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		000000000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5HJZVR5T43;
+				INFOPLIST_FILE = iPadApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DieFraktur;
+				PRODUCT_NAME = DieFraktur;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.8;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		00000000000000000000000a /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5HJZVR5T43;
+				INFOPLIST_FILE = iPadApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.DieFraktur;
+				PRODUCT_NAME = DieFraktur;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.8;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00000000000000000000000b /* Build configuration list for PBXProject "iPadApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000009 /* Debug */,
+				00000000000000000000000a /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00000000000000000000000d /* Build configuration list for PBXNativeTarget "DieFraktur" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000000000009 /* Debug */,
+				00000000000000000000000a /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 111111111111111111111111 /* Project object */;
+}
