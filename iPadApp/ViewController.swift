@@ -17,6 +17,10 @@ class ViewController: UIViewController {
     let preferences = WKPreferences()
     preferences.javaScriptEnabled = true
     configuration.preferences = preferences
+    configuration.allowsInlineMediaPlayback = true
+    configuration.mediaTypesRequiringUserActionForPlayback = []
+    configuration.allowsAirPlayForMediaPlayback = true
+
     webView = WKWebView(frame: .zero, configuration: configuration)
     webView.backgroundColor = .black
     view = webView
