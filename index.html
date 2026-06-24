@@ -392,7 +392,21 @@
 
     const introOverlay = document.getElementById("introOverlay");
 
+    async function enterFullscreen() {
+      const el = document.documentElement;
+      try {
+        if (el.requestFullscreen) {
+          await el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) {
+          await el.webkitRequestFullscreen();
+        }
+      } catch (e) {
+        console.log("Fullscreen not available:", e);
+      }
+    }
+
     startButton.addEventListener("click", async () => {
+      await enterFullscreen();
       introOverlay.style.display = "none";
       appState.params = createRandomParams();
       updateDerivedInput();
