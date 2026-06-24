@@ -3,10 +3,13 @@ import WebKit
 
 class ViewController: UIViewController, WKScriptMessageHandler {
     private var webView: WKWebView!
-
+    
     // Set to true by SceneDelegate when this instance is on the projector
     var isExternalDisplay: Bool = false
-
+    
+    // Store the external screen reference
+    var externalScreen: UIScreen?
+    
     override var prefersStatusBarHidden: Bool { true }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .landscape }
 
@@ -18,10 +21,10 @@ class ViewController: UIViewController, WKScriptMessageHandler {
         configuration.allowsInlineMediaPlayback = true
         configuration.mediaTypesRequiringUserActionForPlayback = []
         configuration.allowsAirPlayForMediaPlayback = true
-
+        
         // Message handler so JS can notify Swift when the iPad starts the piece
         configuration.userContentController.add(self, name: "appBridge")
-
+        
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.backgroundColor = .black
         view = webView
@@ -30,6 +33,16 @@ class ViewController: UIViewController, WKScriptMessageHandler {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadLocalWebsite()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // If this is the external display, we don't need to do anything special
+        // The window is already set up by SceneDelegate
+        if isExternalDisplay {
+            print("📺 ViewController running on external display (projector)")
+        }
     }
 
     private func loadLocalWebsite() {
@@ -42,7 +55,7 @@ class ViewController: UIViewController, WKScriptMessageHandler {
             return
         }
         webView.loadFileURL(indexURL, allowingReadAccessTo: indexURL.deletingLastPathComponent())
-
+        
         // Once the page loads, if this is the projector, auto-start immediately
         if isExternalDisplay {
             webView.navigationDelegate = self

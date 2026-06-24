@@ -4,12 +4,8 @@
   <meta charset="UTF-8" />
   <title>die-fraktur-der-frakturen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <meta name="theme-color" content="#000000" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="die-fraktur-der-frakturen" />
-  <link rel="apple-touch-icon" href="cursor.svg" />
-  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
   <!-- Hydra -->
   <script src="hydra-engine.js"></script>
@@ -396,14 +392,65 @@
 
     const introOverlay = document.getElementById("introOverlay");
 
-    startButton.addEventListener("click", async () => {
+    async function enterFullscreen() {
+      const el = document.documentElement;
+      try {
+        if (el.requestFullscreen) {
+          await el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) {
+          await el.webkitRequestFullscreen();
+        }
+      } catch (e) {
+        console.log("Fullscreen not available:", e);
+      }
+    }
+
+    // ===== FIXED: Proper initialization order =====
+    // We initialize Hydra first, then start audio inside the gesture
+    startButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      
+      // 1. First, hide the overlay and show the canvas
       introOverlay.style.display = "none";
+      
+      // 2. Generate params and update input state
       appState.params = createRandomParams();
       updateDerivedInput();
-      installInputListeners();
-      requestAnimationFrame(stepInputSmoothing);
+      
+      // 3. Initialize Hydra visuals FIRST (this is what you had before)
       initHydraVisuals(appState);
-      await startSynthesis(appState);
+      
+      // 4. Install input listeners
+      installInputListeners();
+      
+      // 5. Start the animation loop
+      requestAnimationFrame(stepInputSmoothing);
+      
+      // 6. NOW start audio - we do this after visuals are set up,
+      //    but crucially, we're STILL inside the user gesture callback
+      try {
+        // This is the key: Tone.start() is called while we're still
+        // inside the click handler, so it counts as a user gesture
+        console.log("Starting audio...");
+        await Tone.start();
+        console.log("AudioContext state after start:", Tone.context.state);
+        
+        // If for some reason it's not running, try to resume
+        if (Tone.context.state !== 'running') {
+          console.warn("AudioContext not running, attempting resume...");
+          await Tone.context.resume();
+        }
+        
+        // Now start the synthesis
+        await startSynthesis(appState);
+        console.log("Synthesis started successfully. Audio state:", Tone.context.state);
+      } catch (audioError) {
+        console.error("Failed to start audio:", audioError);
+        // Visuals still work even if audio fails
+      }
+      
+      // 7. Request fullscreen (can be done anytime after the gesture)
+      await enterFullscreen();
     });
   </script>
 </body>
